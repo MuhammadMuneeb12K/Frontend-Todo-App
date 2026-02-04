@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Inter } from "next/font/google";
@@ -19,7 +19,11 @@ export const metadata: Metadata = {
     "A professional todo application for managing your tasks with authentication, real-time updates, and responsive design. Built with Next.js and TypeScript.",
   keywords: ["todo", "task management", "productivity", "tasks", "todo list"],
   authors: [{ name: "TaskFlow Team" }],
-  viewport: "width=device-width, initial-scale=1",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
   themeColor: "#6366f1",
 };
 
