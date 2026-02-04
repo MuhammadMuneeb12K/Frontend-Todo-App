@@ -14,10 +14,11 @@ interface TaskItemProps {
 
 const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onEdit, onDelete }) => {
   const [isToggling, setIsToggling] = useState(false);
+  const isCompleted = task.status === 'done';
 
   const handleToggle = async () => {
     setIsToggling(true);
-    await onToggle(task.id, !task.completed);
+    await onToggle(task.id, !isCompleted);
     setIsToggling(false);
   };
 
@@ -26,7 +27,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onEdit, onDelete })
       className={`
         group relative p-4 rounded-xl border transition-all duration-300 animate-slide-in
         ${
-          task.completed
+          isCompleted
             ? "bg-gray-50 border-gray-200 hover:border-gray-300"
             : "bg-white border-gray-200 hover:border-indigo-300 hover:shadow-md"
         }
@@ -41,15 +42,15 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onEdit, onDelete })
             mt-1 flex-shrink-0 w-6 h-6 rounded-lg border-2 transition-all duration-200
             flex items-center justify-center
             ${
-              task.completed
+              isCompleted
                 ? "bg-indigo-500 border-indigo-500"
                 : "border-gray-300 hover:border-indigo-500 bg-white"
             }
             ${isToggling ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           `}
-          aria-label={`Mark "${task.title}" as ${task.completed ? "incomplete" : "complete"}`}
+          aria-label={`Mark "${task.title}" as ${isCompleted ? "incomplete" : "complete"}`}
         >
-          {task.completed && <Check className="w-4 h-4 text-white" />}
+          {isCompleted && <Check className="w-4 h-4 text-white" />}
         </button>
 
         {/* Task Content */}
@@ -57,7 +58,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onEdit, onDelete })
           <h3
             className={`
               text-base font-semibold mb-1 transition-all duration-200
-              ${task.completed ? "line-through text-gray-500" : "text-gray-900"}
+              ${isCompleted ? "line-through text-gray-500" : "text-gray-900"}
             `}
           >
             {task.title}
@@ -67,7 +68,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onEdit, onDelete })
             <p
               className={`
                 text-sm mb-2 transition-all duration-200
-                ${task.completed ? "text-gray-400" : "text-gray-600"}
+                ${isCompleted ? "text-gray-400" : "text-gray-600"}
               `}
             >
               {task.description}
@@ -77,7 +78,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle, onEdit, onDelete })
           <div className="flex items-center gap-4 text-xs text-gray-500">
             <span className="flex items-center gap-1">
               <Circle className="w-3 h-3" />
-              Created {formatDate(task.createdAt)}
+              Created {formatDate(task.created_at)}
             </span>
           </div>
         </div>

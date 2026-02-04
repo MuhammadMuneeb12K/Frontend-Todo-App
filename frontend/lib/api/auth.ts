@@ -19,7 +19,7 @@ export const clearAuthTokens = (): void => {
   }
 };
 
-export const signIn = async (credentials: SignInRequest): Promise<AuthResponse> => {
+export const signin = async (credentials: SignInRequest): Promise<AuthResponse> => {
   const response = await apiClient.post('/api/v1/auth/signin', credentials);
   if (response.data.access_token && response.data.refresh_token) {
     storeAuthTokens(response.data);
@@ -27,12 +27,15 @@ export const signIn = async (credentials: SignInRequest): Promise<AuthResponse> 
   return response.data;
 };
 
-export const signUp = async (userData: SignUpRequest): Promise<User> => {
+export const signup = async (userData: SignUpRequest): Promise<AuthResponse> => {
   const response = await apiClient.post('/api/v1/auth/signup', userData);
+  if (response.data.access_token && response.data.refresh_token) {
+    storeAuthTokens(response.data);
+  }
   return response.data;
 };
 
-export const signOut = (): void => {
+export const signout = (): void => {
   clearAuthTokens();
   if (typeof window !== 'undefined') {
     window.location.href = '/signin';
@@ -66,7 +69,7 @@ export const refreshToken = async (): Promise<AuthResponse | null> => {
         return response.data;
     } catch (error) {
         console.error('Failed to refresh token', error);
-        signOut(); // Force sign out if refresh fails
+        signout(); // Force sign out if refresh fails
         return null;
     }
 };

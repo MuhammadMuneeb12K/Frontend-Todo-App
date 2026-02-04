@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { getEmailError, getPasswordError } from "@/lib/utils/validation";
-import { ApiErrorResponse } from "@/types/api";
+import { ApiError } from "@/types/api";
 import { Mail, Lock, User, ArrowRight } from "lucide-react";
 
 const SignUpForm: React.FC = () => {
@@ -43,10 +43,10 @@ const SignUpForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await signup({ email, password, name: name.trim() || undefined });
+      await signup({ email, password, full_name: name.trim() || undefined });
       router.push("/dashboard");
     } catch (error) {
-      if (error instanceof ApiErrorResponse) {
+      if (error instanceof ApiError) {
         if (error.statusCode === 409) {
           setErrors({ email: "An account with this email already exists" });
         } else {

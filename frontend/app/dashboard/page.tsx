@@ -24,7 +24,7 @@ export default function DashboardPage() {
 
   // Calculate stats
   const totalTasks = tasks.length;
-  const completedTasks = tasks.filter((t) => t.completed).length;
+  const completedTasks = tasks.filter((t) => t.status === 'done').length;
   const pendingTasks = totalTasks - completedTasks;
   const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 

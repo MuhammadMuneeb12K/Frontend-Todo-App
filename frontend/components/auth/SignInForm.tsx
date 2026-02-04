@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { getEmailError, getPasswordError } from "@/lib/utils/validation";
-import { ApiErrorResponse } from "@/types/api";
+import { ApiError } from "@/types/api";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 
 const SignInForm: React.FC = () => {
@@ -39,10 +39,10 @@ const SignInForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await signin({ email, password });
+      await signin({ username: email, password });
       router.push("/dashboard");
     } catch (error) {
-      if (error instanceof ApiErrorResponse) {
+      if (error instanceof ApiError) {
         if (error.statusCode === 401) {
           setErrors({ general: "Invalid email or password" });
         } else {

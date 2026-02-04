@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { storeAuthTokens, clearAuthTokens, getAuthTokens } from './auth';
+import { ApiError } from '@/types/api';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
@@ -23,6 +24,8 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // Handle 401 with token refresh
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const tokens = getAuthTokens();
@@ -45,7 +48,16 @@ apiClient.interceptors.response.use(
         }
       }
     }
-    return Promise.reject(error);
+
+    // Transform axios error to ApiError
+    if (error.response) {
+      const statusCode = error.response.status;
+      const detail = error.response.data?.detail || error.response.data?.message || 'An error occurred';
+      throw new ApiError(statusCode, detail);
+    }
+
+    // Network or other errors
+    throw new ApiError(500, 'Network error or server is unavailable');
   }
 );
 

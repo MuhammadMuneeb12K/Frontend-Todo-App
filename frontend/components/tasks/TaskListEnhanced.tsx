@@ -27,8 +27,8 @@ const TaskListEnhanced: React.FC<TaskListEnhancedProps> = ({
   const [filter, setFilter] = useState<FilterType>("all");
 
   const filteredTasks = tasks.filter((task) => {
-    if (filter === "active") return !task.completed;
-    if (filter === "completed") return task.completed;
+    if (filter === "active") return task.status !== 'done';
+    if (filter === "completed") return task.status === 'done';
     return true;
   });
 
@@ -66,8 +66,8 @@ const TaskListEnhanced: React.FC<TaskListEnhancedProps> = ({
                     filterType === "all"
                       ? tasks.length
                       : filterType === "active"
-                      ? tasks.filter((t) => !t.completed).length
-                      : tasks.filter((t) => t.completed).length
+                      ? tasks.filter((t) => t.status !== 'done').length
+                      : tasks.filter((t) => t.status === 'done').length
                   })
                 </span>
               </button>

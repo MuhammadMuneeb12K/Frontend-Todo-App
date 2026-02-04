@@ -9,6 +9,11 @@ export interface Task {
   updated_at: string;
 }
 
+export interface TaskFormData {
+  title: string;
+  description?: string;
+}
+
 export interface CreateTaskRequest {
   title: string;
   description?: string;

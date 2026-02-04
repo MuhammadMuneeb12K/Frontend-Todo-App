@@ -35,7 +35,8 @@ export interface SignInRequest {
   password: string;
 }
 
-// Auth API response types
+// Auth API response types - includes both tokens and user
 export interface AuthResponse extends AuthTokens {
+  user: User;
 }
 
